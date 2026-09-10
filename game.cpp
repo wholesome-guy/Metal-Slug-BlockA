@@ -114,10 +114,10 @@ void Game::Render()
 	{
 		_debug->DrawBoxDebug(screen, _camera, _player->GetHitboxPosition(), _player->GetHitboxSize(), 0x00ff00);
 
-		//for (int i = 0; i < 20000; i++)
-		//{
-		//	_debug->DrawBoxDebug(screen, _camera, _level->GetTile(i).position, _level->GetTile(i).size, _level->GetTile(i).color);
-		//}
+		for (int i = 0; i < 20000; i++)
+		{
+			_debug->DrawBoxDebug(screen, _camera, _level->GetTile(i).position, _level->GetTile(i).size, _level->GetTile(i).color);
+		}
 
 		for (int i = 0; i < _collision->GetTileCount(); i++)
 		{

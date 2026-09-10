@@ -3,6 +3,7 @@
 class Animator;
 class Camera;
 enum AnimationState { Idle, Walk, Jump, IdleShoot,WalkShoot,JumpShoot,JumpForward, CrouchIdle, CrouchWalk, CrouchShoot, Count };
+enum CollisionState { Ground, OneWay,Slope };
 
 struct AnimationClip
 {
@@ -25,7 +26,7 @@ public:
 	void SetInputs(float2 movementInput);
 	void Jump();
 	void Shoot();
-	void Collision(float2 pushVector);
+	void Collision(float2 pushVector, CollisionState collisionState);
 
 	float2 GetPosition() { return _position; }
 	float2 GetHitboxPosition() { return { _position.x + _hitboxOffset.x, _position.y + _hitboxOffset.y };}
@@ -38,18 +39,22 @@ private:
 	void AnimationStateUpdate();
 	void UpdateAnimation(float);
 	void PlayClip(Animator* animator, const AnimationClip& clip, float deltatime);
+
 	void JumpUpdate(float);
 	void WalkUpdate(float);
 	void ShootUpdate();
+
 	void LookDirection();
 	void InitSprite();
 
 
 	float2 _position = { 80, 110 };
 	float2 _previousPosition = _position;
+
 	float _walkSpeed = 0.15f;
 	float _crouchSpeed = 0.05f;
-	float _jumpForce = 0.25f;
+	float _slopeSpeed = 0.06f;
+	float _jumpForce = 0.237f;
 	float _chosenSpeed = 0;
 
 	float _velocityX = 0;
@@ -66,6 +71,14 @@ private:
 	bool _isMoving = false;
 	float2 _movementInput = {0,0};
 
+	bool _isFacingLeft = false;
+	AnimationState _animationState = AnimationState::Idle;
+
+	//Collisions
+	float2 _hitboxOffset = { 18, 26 };
+	int _hitboxWidth = 28;
+	int _hitboxHeight = 38;
+
 	int _crouchIdleFrameCount = 7;
 	Sprite* _crouchIdleSprite = nullptr;
 
@@ -79,7 +92,6 @@ private:
 	int _walkFrameCount = 12;
 	Sprite* _walkTorsoSprite = nullptr;
 	Sprite* _walkLegSprite = nullptr;
-
 
 	int _jumpFrameCount = 6;
 	Sprite* _jumpTorsoSprite = nullptr;
@@ -103,12 +115,6 @@ private:
 	AnimationClip _legClips[(int)AnimationState::Count];
 	AnimationClip _shootClips[(int)AnimationState::Count];
 
-	bool _isFacingLeft = false;
-	AnimationState _animationState = AnimationState::Idle;
-	//Collisions
-	float2 _hitboxOffset = { 18, 26 };
-	int _hitboxWidth = 28;
-	int _hitboxHeight = 38;
 
 
 };

@@ -28,7 +28,7 @@ private:
 
 
 	float2 AABB(float2 positionA, int2 sizeA, float2 positionB, int2 sizeB);
-
+	float2 SlopeResolve(float2 positionA, int2 sizeA, float2 positionB, int2 sizeB);
 
 };
 

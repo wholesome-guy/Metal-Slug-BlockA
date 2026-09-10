@@ -272,22 +272,64 @@ void Player::Shoot()
 	_shoot = true;
 }
 
-void Player::Collision(float2 pushVector)
+void Player::Collision(float2 pushVector, CollisionState collisionState)
 {
-	_position.x += pushVector.x;
-	_position.y += pushVector.y;
-
-	if (pushVector.x != 0) _velocityX = 0;
-	if (pushVector.y != 0)
+	switch (collisionState)
 	{
-		_velocityY = 0;
+	case Ground:
+		_position.x += pushVector.x;
+		_position.y += pushVector.y;
 
-		if (pushVector.y < 0) 
+		if (pushVector.x != 0) _velocityX = 0;
+		if (pushVector.y != 0)
 		{
+			_velocityY = 0;
+
+			if (pushVector.y < 0)
+			{
+				_isGrounded = true;
+				_isJumping = false;
+			}
+		}
+		break;
+
+	case OneWay:
+
+		if (pushVector.y < 0 && _velocityY >= 0)
+		{
+			_position.y += pushVector.y;
+			_velocityY = 0;
 			_isGrounded = true;
 			_isJumping = false;
 		}
+
+		break;
+	case Slope:
+
+		_position.y += pushVector.y;
+		_velocityY = 0;
+		_isGrounded = true;
+		_isJumping = false;
+		_chosenSpeed = _slopeSpeed;
+		break;
+	default:
+		_position.x += pushVector.x;
+		_position.y += pushVector.y;
+
+		if (pushVector.x != 0) _velocityX = 0;
+		if (pushVector.y != 0)
+		{
+			_velocityY = 0;
+
+			if (pushVector.y < 0)
+			{
+				_isGrounded = true;
+				_isJumping = false;
+			}
+		}
+		break;
 	}
+	
 }
 
 
