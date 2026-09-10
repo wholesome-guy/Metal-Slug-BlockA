@@ -19,11 +19,11 @@ void Camera::Follow(float2 targetPosition)
 		_position.x += (relativeX - right);
 	}
 
-	//if (_hasBounds)
-	//{
-	//	if (_position.x < _minX) _position.x = _minX;
-	//	if (_position.x > _maxX - _screenWidth) _position.x = _maxX - _screenWidth;
-	//}
+	if (_hasBounds)
+	{
+		if (_position.x < _minX) _position.x = _minX;
+		if (_position.x > _maxX - _screenWidth) _position.x = _maxX - _screenWidth;
+	}
 
 }
 
