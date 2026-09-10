@@ -6,8 +6,18 @@
 
 void CollisionDetection::Update(float deltatime)
 {
+	CollisionBroadPhase();
+}
 
-	CollisionGrid groundGrid = _level->ReturnCollisionGrid(_player->GetHitboxPosition(), _player->GetHitboxSize(),1);
+void CollisionDetection::CollisionBroadPhase()
+{
+	PlayerTileCollisions();
+}
+
+void CollisionDetection::PlayerTileCollisions()
+{
+
+	CollisionGrid groundGrid = _level->ReturnCollisionGrid(_player->GetHitboxPosition(), _player->GetHitboxSize(), 1);
 	_tileCount = groundGrid.count;
 
 	for (int i = 0; i < groundGrid.count; i++)
@@ -16,7 +26,7 @@ void CollisionDetection::Update(float deltatime)
 		float2 direction = AABB(_player->GetHitboxPosition(), _player->GetHitboxSize(), groundGrid.tiles[i].position, groundGrid.tiles[i].size);
 		if (direction.x != 0 || direction.y != 0)
 		{
-			_player->Collision(direction,CollisionState::Ground);
+			_player->Collision(direction, CollisionState::Ground);
 		}
 	}
 
@@ -41,13 +51,12 @@ void CollisionDetection::Update(float deltatime)
 		_player->Collision(direction, CollisionState::Slope);
 
 	}
-
 }
 
 float2 CollisionDetection::AABB(float2 positionA, int2 sizeA, float2 positionB, int2 sizeB)
 {
 
-	if (sizeA.x == 0 || sizeA.y == 0|| sizeB.x == 0 || sizeB.y == 0) return { 0,0 };
+	if (sizeA.x == 0 || sizeA.y == 0 || sizeB.x == 0 || sizeB.y == 0) return { 0,0 };
 
 	bool overlapping = ((positionA.x + sizeA.x >= positionB.x) && (positionA.x <= positionB.x + sizeB.x) && (positionA.y + sizeA.y >= positionB.y) && (positionA.y <= positionB.y + sizeB.y));
 	if (!overlapping) return { 0,0 };
@@ -84,7 +93,7 @@ float2 CollisionDetection::SlopeResolve(float2 positionA, int2 sizeA, float2 pos
 
 	if (overlap > 0 && overlap <= sizeB.y)
 	{
-		return { 0, -overlap }; 
+		return { 0, -overlap };
 	}
 }
 

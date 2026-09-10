@@ -39,14 +39,14 @@ private:
 	void AnimationStateUpdate();
 	void UpdateAnimation(float);
 	void PlayClip(Animator* animator, const AnimationClip& clip, float deltatime);
+	void LookDirection();
+	void InitSprite();
 
 	void JumpUpdate(float);
 	void WalkUpdate(float);
 	void ShootUpdate();
 
-	void LookDirection();
-	void InitSprite();
-
+	void TileCollision(float2 pushVector, CollisionState collisionState);
 
 	float2 _position = { 80, 110 };
 	float2 _previousPosition = _position;
