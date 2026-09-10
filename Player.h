@@ -21,10 +21,8 @@ public:
 	void Collision(float2 pushVector);
 
 	float2 GetPosition() { return _position; }
-	float2 GetHitbox() { return { _position.x + _hitboxOffset.x, _position.y + _hitboxOffset.y };}
-	float2 GetHitboxOffset() { return _hitboxOffset; }
+	float2 GetHitboxPosition() { return { _position.x + _hitboxOffset.x, _position.y + _hitboxOffset.y };}
 	int2 GetHitboxSize() { return { _hitboxWidth,_hitboxHeight }; }
-	float2 GetPlayerFeetPosition() { return { GetHitbox().x,GetHitbox().y + _hitboxHeight }; }
 	float2 GetPreviousHitbox() { return { _previousPosition.x + _hitboxOffset.x, _previousPosition.y + _hitboxOffset.y }; }
 	//void SetHitBoxOffset(int x, int y) { _hitboxOffset.x += x; _hitboxOffset.y += y; }
 

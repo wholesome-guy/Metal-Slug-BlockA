@@ -46,4 +46,4 @@ private:
 	Debug* _debug = nullptr;
 };
 
-} // namespace Tmpl8
+}

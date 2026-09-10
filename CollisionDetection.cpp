@@ -7,13 +7,13 @@
 void CollisionDetection::Update(float deltatime)
 {
 
-	CollisionGrid grid = _level->ReturnCollisionGrid(_player->GetHitbox(), _player->GetHitboxSize(),1);
+	CollisionGrid grid = _level->ReturnCollisionGrid(_player->GetHitboxPosition(), _player->GetHitboxSize(),1);
 	_tileCount = grid.count;
 
 	for (int i = 0; i < grid.count; i++)
 	{
 		_tiles[i] = grid.tiles[i];
-		float2 direction = AABB(_player->GetHitbox(), _player->GetHitboxSize(), _tiles[i].position, _tiles[i].size);
+		float2 direction = AABB(_player->GetHitboxPosition(), _player->GetHitboxSize(), _tiles[i].position, _tiles[i].size);
 		if (direction.x != 0 || direction.y != 0)
 		{
 			_player->Collision(direction);

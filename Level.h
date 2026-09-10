@@ -18,7 +18,7 @@ class Level {
 
 public:
 	Level();
-
+	virtual ~Level();
 	void Render(Tmpl8::Surface* screen, Camera* camera);
 
 	CollisionGrid ReturnCollisionGrid(float2 hitboxPos, int2 hitboxSize, int value);

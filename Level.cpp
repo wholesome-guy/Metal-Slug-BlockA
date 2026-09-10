@@ -10,6 +10,11 @@ Level::Level()
 	InitTiles();
 }
 
+Level::~Level()
+{
+	delete _map;
+}
+
 
 void Level::Render(Tmpl8::Surface* screen, Camera* camera)
 {

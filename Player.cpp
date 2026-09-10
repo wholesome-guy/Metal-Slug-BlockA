@@ -40,6 +40,21 @@ Player:: ~Player()
 	delete _animatorTorso;
 	delete _animatorLeg;
 	delete _animatorShoot;
+
+	delete _idleTorsoSprite;
+	delete _idleLegSprite;
+	delete _walkTorsoSprite;
+	delete _walkLegSprite;
+	delete _jumpTorsoSprite;
+	delete _jumpLegSprite;
+	delete _forwardJumpTorsoSprite;
+	delete _forwardJumpLegSprite;
+	delete _idleShootSprite;
+	delete _walkShootSprite;
+	delete _jumpShootSprite;
+	delete _crouchShootSprite;
+	delete _crouchIdleSprite;
+	delete _crouchWalkSprite;
 }
 void Player::Update(float deltatime)
 {
