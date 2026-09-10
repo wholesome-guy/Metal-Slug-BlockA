@@ -89,27 +89,28 @@ void Player::Render(Tmpl8::Surface * screen,Camera* camera)
 {
 	int2 screenPosition = camera->WorldToScreen(_position);
 
-	Sprite* leg = _legClips[(int)_animationState].sprite;
-	Sprite* torso = _torsoClips[(int)_animationState].sprite;
+	Sprite* legSprite = _legClips[static_cast<int>(_animationState)].sprite;
+	Sprite* torsoSprite = _torsoClips[static_cast<int>(_animationState)].sprite;
 
-	if (leg)   leg->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
-	if (torso) torso->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
+	if (legSprite != nullptr)   legSprite->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
+	//torso draw later (on top)
+	if (torsoSprite != nullptr) torsoSprite->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
 
 	if (_isShooting)
 	{
-		Sprite* shoot = _shootClips[(int)_animationState].sprite;
-		if (shoot) shoot->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
+		Sprite* shootSprite = _shootClips[static_cast<int>(_animationState)].sprite;
+		if (shootSprite) shootSprite->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
 	}
 }
 
 void Player::UpdateAnimation(float deltatime)
 {
-	PlayClip(_animatorTorso, _torsoClips[(int)_animationState], deltatime);
-	PlayClip(_animatorLeg, _legClips[(int)_animationState], deltatime);
+	PlayClip(_animatorTorso, _torsoClips[static_cast<int>(_animationState)], deltatime);
+	PlayClip(_animatorLeg, _legClips[static_cast<int>(_animationState)], deltatime);
 
 	if (_isShooting)
 	{
-		PlayClip(_animatorShoot, _shootClips[(int)_animationState], deltatime);
+		PlayClip(_animatorShoot, _shootClips[static_cast<int>(_animationState)], deltatime);
 	}
 }
 
@@ -131,7 +132,9 @@ void Player::SetInputs(float2 movementInput)
 void Player::JumpUpdate(float deltatime)
 {
 	_velocityY += GRAVITY * deltatime;
+
 	if (_velocityY > 0.5f) _velocityY = 0.5f;
+
 	if (_jump && _isGrounded)
 	{
 		_velocityY = -_jumpForce;
@@ -140,15 +143,6 @@ void Player::JumpUpdate(float deltatime)
 		_isJumping = true;
 	}
 	_position.y += _velocityY * deltatime;
-
-	//if (_position.y >= groundY)
-	//{
-	//	_position.y = groundY;
-	//	_velocityY = 0;
-	//	_isGrounded = true;
-	//	_jump = false;
-	//	_isJumping = false;
-	//}
 }
 
 void Player::WalkUpdate(float deltatime)

@@ -51,7 +51,6 @@ private:
 	float _crouchSpeed = 0.05f;
 	float _jumpForce = 0.25f;
 	float _chosenSpeed = 0;
-	const float groundY = 110.0f;
 
 	float _velocityX = 0;
 	float _velocityY = 0;
