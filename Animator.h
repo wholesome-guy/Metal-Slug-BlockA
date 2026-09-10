@@ -5,15 +5,20 @@ class Animator
 public:
 
 	Animator() = default;
-	int GetFrame(Sprite* sprite, float FPS, float deltatime,bool, int animationId = -1);
-	void Reset() { _animationTimer = 0; _finished = false; }
-	bool Finished() { return _finished; }
+	int GetFramesLoop(Sprite* sprite, float FPS, float deltatime);
+
+	int GetFramesOneShot(Sprite* sprite, float FPS, float deltatime);
+	bool IsOneShotFinished() const { return _oneShotFinished; }
+	void ResetOneShotTimer() { _oneShotTimer = 0; _oneShotFinished = false; }
+
 private:
 
 	float GetAnimationTime(int frameCount, int fps);
-	float _animationTimer = 0;
-	Sprite* _lastSprite = nullptr;
-	int _lastAnimationId = -1;
-	bool _finished = false;
+
+	Sprite* _lastLoopingSprite = nullptr;
+	float _loopingTimer = 0;
+
+	float _oneShotTimer = 0;
+	bool _oneShotFinished = false;
 };
 

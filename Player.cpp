@@ -123,56 +123,56 @@ void Player::UpdateAnimation(float deltatime)
 	{
 	case AnimationState::Idle:
 
-		_idleTorsoSprite->SetFrame(_animatorTorso->GetFrame(_idleTorsoSprite, 6, deltatime, true));
-		_idleLegSprite->SetFrame(_animatorLeg->GetFrame(_idleLegSprite, 6, deltatime, true));
+		_idleTorsoSprite->SetFrame(_animatorTorso->GetFramesLoop(_idleTorsoSprite, 6, deltatime));
+		_idleLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_idleLegSprite, 6, deltatime));
 
 
 		break;
 	case AnimationState::IdleShoot:
 
-		_idleShootSprite->SetFrame(_animatorShoot->GetFrame(_idleShootSprite, 10, deltatime, false, 1));
-		_idleLegSprite->SetFrame(_animatorLeg->GetFrame(_idleLegSprite, 6, deltatime, true));
+		_idleShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_idleShootSprite, 10, deltatime));
+		_idleLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_idleLegSprite, 6, deltatime));
 
 		break;
 	case AnimationState::Walk:
 
-		_walkTorsoSprite->SetFrame(_animatorTorso->GetFrame(_walkTorsoSprite, 24, deltatime, true));
-		_walkLegSprite->SetFrame(_animatorLeg->GetFrame(_walkLegSprite, 24, deltatime, true));
+		_walkTorsoSprite->SetFrame(_animatorTorso->GetFramesLoop(_walkTorsoSprite, 24, deltatime));
+		_walkLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_walkLegSprite, 24, deltatime));
 
 		break;
 	case AnimationState::WalkShoot:
 
-		_walkShootSprite->SetFrame(_animatorShoot->GetFrame(_walkShootSprite, 10, deltatime, false, 1));
-		_walkLegSprite->SetFrame(_animatorLeg->GetFrame(_walkLegSprite, 12, deltatime, true));
+		_walkShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_walkShootSprite, 10, deltatime));
+		_walkLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_walkLegSprite, 12, deltatime));
 
 		break;
 	case AnimationState::Jump:
 
-		_jumpTorsoSprite->SetFrame(_animatorJumpTorso->GetFrame(_jumpTorsoSprite, 6, deltatime, true, 1));
-		_jumpLegSprite->SetFrame(_animatorJumpLeg->GetFrame(_jumpLegSprite, 6, deltatime, true, 1));
+		_jumpTorsoSprite->SetFrame(_animatorJumpTorso->GetFramesLoop(_jumpTorsoSprite, 6, deltatime));
+		_jumpLegSprite->SetFrame(_animatorJumpLeg->GetFramesLoop(_jumpLegSprite, 6, deltatime));
 
 		break;
 	case AnimationState::JumpShoot:
 
-		_jumpShootSprite->SetFrame(_animatorShoot->GetFrame(_jumpShootSprite, 6, deltatime, false, 1));
-		_jumpLegSprite->SetFrame(_animatorLeg->GetFrame(_jumpLegSprite, 6, deltatime, false));
+		_jumpShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_jumpShootSprite, 6, deltatime));
+		_jumpLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_jumpLegSprite, 6, deltatime));
 
 		break;
 	case AnimationState::CrouchIdle:
 
-		_crouchIdleSprite->SetFrame(_animatorTorso->GetFrame(_crouchIdleSprite, 6, deltatime, true));
+		_crouchIdleSprite->SetFrame(_animatorTorso->GetFramesLoop(_crouchIdleSprite, 6, deltatime));
 		break;
 	case AnimationState::CrouchWalk:
 
-		_crouchWalkSprite->SetFrame(_animatorTorso->GetFrame(_crouchWalkSprite, 6, deltatime, true));
+		_crouchWalkSprite->SetFrame(_animatorTorso->GetFramesLoop(_crouchWalkSprite, 6, deltatime));
 
 		break;
 	case AnimationState::CrouchShoot:
-		_crouchShootSprite->SetFrame(_animatorShoot->GetFrame(_crouchShootSprite, 10, deltatime, false, 1));
+		_crouchShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_crouchShootSprite, 10, deltatime));
 		break;
 	case AnimationState::JumpForward:
-		_forwardJumpTorsoSprite->SetFrame(_animatorTorso->GetFrame(_forwardJumpTorsoSprite, 6, deltatime, false));
-		_forwardJumpLegSprite->SetFrame(_animatorLeg->GetFrame(_forwardJumpLegSprite, 6, deltatime, false));
+		_forwardJumpTorsoSprite->SetFrame(_animatorTorso->GetFramesLoop(_forwardJumpTorsoSprite, 6, deltatime));
+		_forwardJumpLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_forwardJumpLegSprite, 6, deltatime));
 		break;
 	}
 }
@@ -232,14 +232,15 @@ void Player::ShootUpdate()
 {
 	if (_shoot)
 	{
+		//_shootingAnimationFinished = false;
 		_isShooting = true;
-		_animatorShoot->Reset();
+		_animatorShoot->ResetOneShotTimer();
 	}
 	_shoot = false;
 
 	if (_isShooting)
 	{
-		if (_animatorShoot->Finished())
+		if (_animatorShoot->IsOneShotFinished())
 		{
 			_isShooting = false;
 		}
