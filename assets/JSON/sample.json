@@ -1,0 +1,11 @@
+{
+  "name": "Alex",
+  "age": 29,
+  "isStudent": false,
+  "hobbies": ["reading", "cycling", "coding"],
+  "address": {
+    "city": "Breda",
+    "country": "Netherlands"
+  },
+  "pets": null
+}

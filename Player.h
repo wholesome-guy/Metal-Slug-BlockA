@@ -1,0 +1,113 @@
+#pragma once
+
+class Animator;
+class Camera;
+enum AnimationState { Idle, Walk, Jump, IdleShoot,WalkShoot,JumpShoot,JumpForward, CrouchIdle, CrouchWalk, CrouchShoot };
+
+class Player{
+
+public:
+
+	Player();
+	
+	virtual ~Player();
+
+	void Update(float deltatime);
+	void Render(Tmpl8::Surface* screen,Camera* camera);
+
+	void SetInputs(float2 movementInput);
+	void Jump();
+	void Shoot();
+	void Collision(float2 pushVector);
+
+	float2 GetPosition() { return _position; }
+	float2 GetHitbox() { return { _position.x + _hitboxOffset.x, _position.y + _hitboxOffset.y };}
+	float2 GetHitboxOffset() { return _hitboxOffset; }
+	int2 GetHitboxSize() { return { _hitboxWidth,_hitboxHeight }; }
+	float2 GetPlayerFeetPosition() { return { GetHitbox().x,GetHitbox().y + _hitboxHeight }; }
+	float2 GetPreviousHitbox() { return { _previousPosition.x + _hitboxOffset.x, _previousPosition.y + _hitboxOffset.y }; }
+	//void SetHitBoxOffset(int x, int y) { _hitboxOffset.x += x; _hitboxOffset.y += y; }
+
+private:
+
+	void AnimationStateUpdate();
+	void UpdateAnimation(float);
+	void JumpUpdate(float);
+	void WalkUpdate(float);
+	void ShootUpdate();
+	void LookDirection();
+	void InitSprite();
+
+
+	float2 _position = { 80, 110 };
+	float2 _previousPosition = _position;
+	float _walkSpeed = 0.15f;
+	float _crouchSpeed = 0.05f;
+	float _jumpForce = 0.25f;
+	float _chosenSpeed = 0;
+	const float groundY = 110.0f;
+
+	float _velocityX = 0;
+	float _velocityY = 0;
+
+	bool _jump = false;
+	bool _isJumping = false;
+	bool _isGrounded = true;
+
+	bool _shoot = false;
+	bool _isShooting = false;
+
+	bool _isCrouching = false;
+	bool _isMoving = false;
+	float2 _movementInput = {0,0};
+
+
+	int _crouchIdleFrameCount = 7;
+	Sprite* _crouchIdleSprite = nullptr;
+
+	int _crouchWalkFrameCount = 7;
+	Sprite* _crouchWalkSprite = nullptr;
+
+	int _idleFrameCount = 7;
+	Sprite* _idleTorsoSprite = nullptr;
+	Sprite* _idleLegSprite = nullptr;
+
+	int _walkFrameCount = 12;
+	Sprite* _walkTorsoSprite = nullptr;
+	Sprite* _walkLegSprite = nullptr;
+
+
+	int _jumpFrameCount = 6;
+	Sprite* _jumpTorsoSprite = nullptr;
+	Sprite* _jumpLegSprite = nullptr;
+	Sprite* _forwardJumpTorsoSprite = nullptr;
+	Sprite* _forwardJumpLegSprite = nullptr;
+
+	int _shootFrameCount = 10;
+	Sprite* _walkShootSprite = nullptr;
+	Sprite* _idleShootSprite = nullptr;
+	Sprite* _jumpShootSprite = nullptr;
+
+	int _crouchShootFrameCount = 10;
+	Sprite* _crouchShootSprite = nullptr;
+
+	Animator* _animatorTorso = nullptr;
+	Animator* _animatorLeg = nullptr;
+
+	Animator* _animatorJumpTorso = nullptr;
+	Animator* _animatorJumpLeg = nullptr;
+
+	Animator* _animatorShoot = nullptr;
+
+
+	bool _isFacingLeft = false;
+	AnimationState _animationState = AnimationState::Idle;
+
+	//Collisions
+	float2 _hitboxOffset = { 18, 26 };
+	int _hitboxWidth = 28;
+	int _hitboxHeight = 38;
+
+
+};
+
