@@ -2,7 +2,14 @@
 
 class Animator;
 class Camera;
-enum AnimationState { Idle, Walk, Jump, IdleShoot,WalkShoot,JumpShoot,JumpForward, CrouchIdle, CrouchWalk, CrouchShoot };
+enum AnimationState { Idle, Walk, Jump, IdleShoot,WalkShoot,JumpShoot,JumpForward, CrouchIdle, CrouchWalk, CrouchShoot, Count };
+
+struct AnimationClip
+{
+	Sprite* sprite = nullptr;
+	float fps = 0;
+	bool loop = false;
+};
 
 class Player{
 
@@ -30,6 +37,7 @@ private:
 
 	void AnimationStateUpdate();
 	void UpdateAnimation(float);
+	void PlayClip(Animator* animator, const AnimationClip& clip, float deltatime);
 	void JumpUpdate(float);
 	void WalkUpdate(float);
 	void ShootUpdate();
@@ -58,7 +66,6 @@ private:
 	bool _isCrouching = false;
 	bool _isMoving = false;
 	float2 _movementInput = {0,0};
-
 
 	int _crouchIdleFrameCount = 7;
 	Sprite* _crouchIdleSprite = nullptr;
@@ -91,16 +98,14 @@ private:
 
 	Animator* _animatorTorso = nullptr;
 	Animator* _animatorLeg = nullptr;
-
-	Animator* _animatorJumpTorso = nullptr;
-	Animator* _animatorJumpLeg = nullptr;
-
 	Animator* _animatorShoot = nullptr;
 
+	AnimationClip _torsoClips[(int)AnimationState::Count];
+	AnimationClip _legClips[(int)AnimationState::Count];
+	AnimationClip _shootClips[(int)AnimationState::Count];
 
 	bool _isFacingLeft = false;
 	AnimationState _animationState = AnimationState::Idle;
-
 	//Collisions
 	float2 _hitboxOffset = { 18, 26 };
 	int _hitboxWidth = 28;

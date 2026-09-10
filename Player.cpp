@@ -27,16 +27,32 @@ void Player::InitSprite()
 	_crouchIdleSprite = new Sprite(new Surface("assets/Player_Crouch_Idle.png"), _crouchIdleFrameCount);
 	_crouchWalkSprite = new Sprite(new Surface("assets/Player_Crouch_Walk.png"), _crouchWalkFrameCount);
 
-	_animatorJumpTorso = new Animator();
-	_animatorJumpLeg = new Animator();
 	_animatorTorso = new Animator();
 	_animatorLeg = new Animator();
 	_animatorShoot = new Animator();
+
+	_torsoClips[(int)AnimationState::Idle] = { _idleTorsoSprite, 6, true };
+	_torsoClips[(int)AnimationState::Walk] = { _walkTorsoSprite, 24, true };
+	_torsoClips[(int)AnimationState::Jump] = { _jumpTorsoSprite, 6, true };
+	_torsoClips[(int)AnimationState::JumpForward] = { _forwardJumpTorsoSprite, 6, true };
+	_torsoClips[(int)AnimationState::CrouchIdle] = { _crouchIdleSprite, 6, true };
+	_torsoClips[(int)AnimationState::CrouchWalk] = { _crouchWalkSprite, 6, true };
+
+	_legClips[(int)AnimationState::Idle] = { _idleLegSprite, 6, true };
+	_legClips[(int)AnimationState::Walk] = { _walkLegSprite, 24, true };
+	_legClips[(int)AnimationState::IdleShoot] = { _idleLegSprite, 6, true };
+	_legClips[(int)AnimationState::WalkShoot] = { _walkLegSprite, 24, true };
+	_legClips[(int)AnimationState::Jump] = { _jumpLegSprite, 6, true };
+	_legClips[(int)AnimationState::JumpShoot] = { _jumpLegSprite, 6, true };
+	_legClips[(int)AnimationState::JumpForward] = { _forwardJumpLegSprite, 6, true };
+
+	_shootClips[(int)AnimationState::IdleShoot] = { _idleShootSprite, 10, false };
+	_shootClips[(int)AnimationState::WalkShoot] = { _walkShootSprite, 10, false };
+	_shootClips[(int)AnimationState::JumpShoot] = { _jumpShootSprite, 10, false };
+	_shootClips[(int)AnimationState::CrouchShoot] = { _crouchShootSprite, 10, false };
 }
 Player:: ~Player()
 {
-	delete _animatorJumpTorso;
-	delete _animatorJumpLeg;
 	delete _animatorTorso;
 	delete _animatorLeg;
 	delete _animatorShoot;
@@ -73,125 +89,40 @@ void Player::Render(Tmpl8::Surface * screen,Camera* camera)
 {
 	int2 screenPosition = camera->WorldToScreen(_position);
 
-	switch (_animationState)
+	Sprite* leg = _legClips[(int)_animationState].sprite;
+	Sprite* torso = _torsoClips[(int)_animationState].sprite;
+
+	if (leg)   leg->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
+	if (torso) torso->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
+
+	if (_isShooting)
 	{
-	case AnimationState::Idle:
-
-		_idleLegSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-		_idleTorsoSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		break;
-	case AnimationState::IdleShoot:
-
-		_idleLegSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		_idleShootSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		break;
-	case AnimationState::Walk:
-
-		_walkLegSprite->Draw(screen, (int)screenPosition.x , (int)screenPosition.y, _isFacingLeft);
-
-		_walkTorsoSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		break; 
-	case AnimationState::WalkShoot:
-
-		_walkLegSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		_walkShootSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		break;
-	case AnimationState::Jump:
-
-		_jumpLegSprite->Draw(screen, (int)screenPosition.x , (int)screenPosition.y, _isFacingLeft);
-
-		_jumpTorsoSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-			break;
-	case AnimationState::JumpShoot:
-
-		_jumpLegSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		_jumpShootSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-
-		break;
-	case AnimationState::CrouchIdle:
-		_crouchIdleSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-		break;
-	case AnimationState::CrouchWalk:
-		_crouchWalkSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-		break;
-	case AnimationState::CrouchShoot:
-		_crouchShootSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-		break;
-	case AnimationState::JumpForward:
-		_forwardJumpTorsoSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-		_forwardJumpLegSprite->Draw(screen, (int)screenPosition.x, (int)screenPosition.y, _isFacingLeft);
-		break;
+		Sprite* shoot = _shootClips[(int)_animationState].sprite;
+		if (shoot) shoot->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
 	}
-
 }
 
 void Player::UpdateAnimation(float deltatime)
 {
-	switch (_animationState)
+	PlayClip(_animatorTorso, _torsoClips[(int)_animationState], deltatime);
+	PlayClip(_animatorLeg, _legClips[(int)_animationState], deltatime);
+
+	if (_isShooting)
 	{
-	case AnimationState::Idle:
-
-		_idleTorsoSprite->SetFrame(_animatorTorso->GetFramesLoop(_idleTorsoSprite, 6, deltatime));
-		_idleLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_idleLegSprite, 6, deltatime));
-
-
-		break;
-	case AnimationState::IdleShoot:
-
-		_idleShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_idleShootSprite, 10, deltatime));
-		_idleLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_idleLegSprite, 6, deltatime));
-
-		break;
-	case AnimationState::Walk:
-
-		_walkTorsoSprite->SetFrame(_animatorTorso->GetFramesLoop(_walkTorsoSprite, 24, deltatime));
-		_walkLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_walkLegSprite, 24, deltatime));
-
-		break;
-	case AnimationState::WalkShoot:
-
-		_walkShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_walkShootSprite, 10, deltatime));
-		_walkLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_walkLegSprite, 12, deltatime));
-
-		break;
-	case AnimationState::Jump:
-
-		_jumpTorsoSprite->SetFrame(_animatorJumpTorso->GetFramesLoop(_jumpTorsoSprite, 6, deltatime));
-		_jumpLegSprite->SetFrame(_animatorJumpLeg->GetFramesLoop(_jumpLegSprite, 6, deltatime));
-
-		break;
-	case AnimationState::JumpShoot:
-
-		_jumpShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_jumpShootSprite, 6, deltatime));
-		_jumpLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_jumpLegSprite, 6, deltatime));
-
-		break;
-	case AnimationState::CrouchIdle:
-
-		_crouchIdleSprite->SetFrame(_animatorTorso->GetFramesLoop(_crouchIdleSprite, 6, deltatime));
-		break;
-	case AnimationState::CrouchWalk:
-
-		_crouchWalkSprite->SetFrame(_animatorTorso->GetFramesLoop(_crouchWalkSprite, 6, deltatime));
-
-		break;
-	case AnimationState::CrouchShoot:
-		_crouchShootSprite->SetFrame(_animatorShoot->GetFramesOneShot(_crouchShootSprite, 10, deltatime));
-		break;
-	case AnimationState::JumpForward:
-		_forwardJumpTorsoSprite->SetFrame(_animatorTorso->GetFramesLoop(_forwardJumpTorsoSprite, 6, deltatime));
-		_forwardJumpLegSprite->SetFrame(_animatorLeg->GetFramesLoop(_forwardJumpLegSprite, 6, deltatime));
-		break;
+		PlayClip(_animatorShoot, _shootClips[(int)_animationState], deltatime);
 	}
 }
 
+void Player::PlayClip(Animator* animator, const AnimationClip& clip, float deltatime)
+{
+	if (!clip.sprite) return;
+
+	int frame = clip.loop
+		? animator->GetFramesLoop(clip.sprite, (int)clip.fps, deltatime)
+		: animator->GetFramesOneShot(clip.sprite, (int)clip.fps, deltatime);
+
+	clip.sprite->SetFrame(frame);
+}
 void Player::SetInputs(float2 movementInput)
 {
 	_movementInput = movementInput;
