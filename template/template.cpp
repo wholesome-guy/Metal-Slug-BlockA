@@ -94,27 +94,9 @@ int main()
 	glfwWindowHint( GLFW_STENCIL_BITS, GL_FALSE );
 	glfwWindowHint( GLFW_RESIZABLE, GL_FALSE /* easier :) */ );
 #ifdef FULLSCREEN
-	window = glfwCreateWindow(SCRWIDTH * WINDOWSCALE, SCRHEIGHT * WINDOWSCALE, "Tmpl8-2024", glfwGetPrimaryMonitor(), 0 );
+	window = glfwCreateWindow(SCRWIDTH * WINDOWSCALE, SCRHEIGHT * WINDOWSCALE, "Metal Slug - Block A", glfwGetPrimaryMonitor(), 0 );
 #else
-	//window = glfwCreateWindow(SCRWIDTH , SCRHEIGHT , "Tmpl8-2024", 0, 0);
-	//custom added
-	
-	//window = glfwCreateWindow( SCRWIDTH * WINDOWSCALE, SCRHEIGHT * WINDOWSCALE, "Tmpl8-2024", 0, 0 );
-
-	if (DEBUG)
-	{
-		window = glfwCreateWindow( SCRWIDTH * WINDOWSCALE, SCRHEIGHT * WINDOWSCALE, "Tmpl8-2024", 0, 0 );
-	}
-	else
-	{
-		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-		glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-		glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-		glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-		window = glfwCreateWindow(mode->width, mode->height, "Tmpl8-2024", monitor, 0);
-	}
+	window = glfwCreateWindow( SCRWIDTH * WINDOWSCALE, SCRHEIGHT * WINDOWSCALE, "Metal Slug - Block A", 0, 0 );
 
 #endif
 	if (!window) FatalError( "glfwCreateWindow failed." );

@@ -90,9 +90,10 @@ void Level::VisualiseTiles()
 
 			uint color;
 			if (value == 1)
-				color = 0x000000; 
+				color = 0x000000;
 			else if (value == 2)
-				color = 0xff0000; 
+				color = 0xff0000;
+			else if (value == 3) color = 0x0000ff;
 			else
 				continue; 
 

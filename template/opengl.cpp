@@ -59,36 +59,6 @@ void CheckProgram( GLuint id )
 	FATALERROR_IF( length > 0, "Shader link error:\n%s", buffer );
 }
 
-//void DrawQuad()
-//{
-//	static GLuint vao = 0;
-//	if (!vao)
-//	{
-//		// generate buffers
-//		static const GLfloat verts[] = { -1, 1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1 };
-//		GLuint vbo = CreateVBO( verts, sizeof( verts ) );
-//		glGenVertexArrays( 1, &vao );
-//		glBindVertexArray( vao );
-//		glEnableVertexAttribArray( 0 );
-//		glBindBuffer( GL_ARRAY_BUFFER, vbo );
-//		glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, NULL );
-//		glBindVertexArray( 0 );
-//		CheckGL();
-//	}
-//
-//	//glViewport( 0, 0, SCRWIDTH*WINDOWSCALE, SCRHEIGHT*WINDOWSCALE );
-//
-//	//custom added
-//	int fbWidth, fbHeight;
-//	extern GLFWwindow* window;                     
-//	glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
-//	glViewport(0, 0, fbWidth, fbHeight);
-//
-//	glBindVertexArray( vao );
-//	glDrawArrays( GL_TRIANGLES, 0, 6 );
-//	glBindVertexArray( 0 );
-//}
-
 void DrawQuad()
 {
 	static GLuint vao = 0;
@@ -96,54 +66,78 @@ void DrawQuad()
 	{
 		// generate buffers
 		static const GLfloat verts[] = { -1, 1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1 };
-		GLuint vbo = CreateVBO(verts, sizeof(verts));
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-		glBindVertexArray(0);
+		GLuint vbo = CreateVBO( verts, sizeof( verts ) );
+		glGenVertexArrays( 1, &vao );
+		glBindVertexArray( vao );
+		glEnableVertexAttribArray( 0 );
+		glBindBuffer( GL_ARRAY_BUFFER, vbo );
+		glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, NULL );
+		glBindVertexArray( 0 );
 		CheckGL();
 	}
 
-	// Compute a pillar/letterboxed viewport that preserves SCRWIDTH:SCRHEIGHT
-	extern GLFWwindow* window;
-	int fbWidth, fbHeight;
-	glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
+	glViewport( 0, 0, SCRWIDTH*WINDOWSCALE, SCRHEIGHT*WINDOWSCALE );
 
-	float targetAspect = (float)SCRWIDTH / (float)SCRHEIGHT;
-	float windowAspect = (float)fbWidth / (float)fbHeight;
-
-	int vpX, vpY, vpW, vpH;
-	if (windowAspect > targetAspect)
-	{
-		// window wider than target -> bars left/right (pillarbox)
-		vpH = fbHeight;
-		vpW = static_cast<int>(fbHeight * targetAspect);
-		vpX = (fbWidth - vpW) / 2;
-		vpY = 0;
-	}
-	else
-	{
-		// window taller than target -> bars top/bottom (letterbox)
-		vpW = fbWidth;
-		vpH = static_cast<int>(fbWidth / targetAspect);
-		vpX = 0;
-		vpY = (fbHeight - vpH) / 2;
-	}
-
-	// clear the whole framebuffer to black first (so bars are black)
-	glViewport(0, 0, fbWidth, fbHeight);
-	glClearColor(0, 0, 0, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	// then restrict drawing to the pillarboxed region
-	glViewport(vpX, vpY, vpW, vpH);
-
-	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindVertexArray(0);
+	glBindVertexArray( vao );
+	glDrawArrays( GL_TRIANGLES, 0, 6 );
+	glBindVertexArray( 0 );
 }
+
+//void DrawQuad()
+//{
+//	static GLuint vao = 0;
+//	if (!vao)
+//	{
+//		// generate buffers
+//		static const GLfloat verts[] = { -1, 1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1 };
+//		GLuint vbo = CreateVBO(verts, sizeof(verts));
+//		glGenVertexArrays(1, &vao);
+//		glBindVertexArray(vao);
+//		glEnableVertexAttribArray(0);
+//		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+//		glBindVertexArray(0);
+//		CheckGL();
+//	}
+//
+//	// Compute a pillar/letterboxed viewport that preserves SCRWIDTH:SCRHEIGHT
+//	extern GLFWwindow* window;
+//	int fbWidth, fbHeight;
+//	glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
+//
+//	float targetAspect = (float)SCRWIDTH / (float)SCRHEIGHT;
+//	float windowAspect = (float)fbWidth / (float)fbHeight;
+//
+//	int vpX, vpY, vpW, vpH;
+//	if (windowAspect > targetAspect)
+//	{
+//		// window wider than target -> bars left/right (pillarbox)
+//		vpH = fbHeight;
+//		vpW = static_cast<int>(fbHeight * targetAspect);
+//		vpX = (fbWidth - vpW) / 2;
+//		vpY = 0;
+//	}
+//	else
+//	{
+//		// window taller than target -> bars top/bottom (letterbox)
+//		vpW = fbWidth;
+//		vpH = static_cast<int>(fbWidth / targetAspect);
+//		vpX = 0;
+//		vpY = (fbHeight - vpH) / 2;
+//	}
+//
+//	// clear the whole framebuffer to black first (so bars are black)
+//	glViewport(0, 0, fbWidth, fbHeight);
+//	glClearColor(0, 0, 0, 1);
+//	glClear(GL_COLOR_BUFFER_BIT);
+//
+//	// then restrict drawing to the pillarboxed region
+//	glViewport(vpX, vpY, vpW, vpH);
+//
+//	glBindVertexArray(vao);
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
+//	glBindVertexArray(0);
+//}
 
 // OpenGL texture wrapper class
 GLTexture::GLTexture( uint w, uint h, uint type )

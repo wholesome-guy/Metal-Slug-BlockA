@@ -110,9 +110,13 @@ void Game::Render()
 
 	_player->Render(screen, _camera);
 
+
 	if (DEBUG)
 	{
 		_debug->DrawBoxDebug(screen, _camera, _player->GetHitboxPosition(), _player->GetHitboxSize(), 0x00ff00);
+
+
+		_camera->DrawDebug(screen, _player->GetPosition());
 
 		for (int i = 0; i < 20000; i++)
 		{

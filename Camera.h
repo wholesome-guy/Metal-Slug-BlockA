@@ -9,6 +9,7 @@ public:
 	}
 
 	void Follow(float2 targetPos);
+	void DrawDebug(Tmpl8::Surface* screen, float2 targetPosition);
 
 	float2 GetPosition() { return _position; }
 
@@ -23,7 +24,9 @@ private:
 
 
 	float _xOffset = 0.25f;
+	float _yOffset = 0.25f;
 	float _deadZoneHalfWidth = 40.f; 
+	float _deadZoneHalfHeight = 40.f;
 	bool _hasBounds = false;
 	float _minX = 0, _maxX = 0;
 };
