@@ -2,11 +2,14 @@
 #include "CollisionDetection.h"
 #include "Player.h"
 #include "Camera.h"
+#include "TesstObject.h"
 
 
 void CollisionDetection::Update(float deltatime)
 {
 	CollisionBroadPhase();
+
+	_object->Collision(PixelPerfect64(_object->GetSprite(), _player->GetSprite(), AABBCheck(_player->GetHitboxPosition(), _player->GetHitboxSize(), _object->GetHitBox(), _object->GetHitBoxSize())));
 }
 
 void CollisionDetection::CollisionBroadPhase()
@@ -53,6 +56,15 @@ void CollisionDetection::PlayerTileCollisions()
 	}
 }
 
+bool CollisionDetection::AABBCheck(float2 positionA, int2 sizeA, float2 positionB, int2 sizeB)
+{
+	if (sizeA.x == 0 || sizeA.y == 0 || sizeB.x == 0 || sizeB.y == 0) return false;
+
+	bool overlapping = ((positionA.x + sizeA.x >= positionB.x) && (positionA.x <= positionB.x + sizeB.x) && (positionA.y + sizeA.y >= positionB.y) && (positionA.y <= positionB.y + sizeB.y));
+	
+	return overlapping;
+}
+
 float2 CollisionDetection::AABB(float2 positionA, int2 sizeA, float2 positionB, int2 sizeB)
 {
 
@@ -95,6 +107,39 @@ float2 CollisionDetection::SlopeResolve(float2 positionA, int2 sizeA, float2 pos
 	{
 		return { 0, -overlap };
 	}
+}
+
+bool CollisionDetection::PixelPerfect64(Sprite* spriteA, Sprite* spriteB, bool isColliding)
+{
+	if (!isColliding) return false;
+	int size = 64;
+
+	uint* pixelA = spriteA->GetBuffer();
+	int numFramesA = spriteA->Frames();
+	unsigned int currentFrameA = spriteA->GetCurrentFrame();
+
+
+	uint* pixelB = spriteB->GetBuffer();
+	int numFramesB = spriteB->Frames();
+	unsigned int currentFrameB = spriteB->GetCurrentFrame();
+
+	for (int y = 0; y < size; y++)
+	{
+		for (int x = 0; x < size; x++)
+		{
+
+			int sourceIndexA = currentFrameA * size + x + y * size * numFramesA;
+
+			int sourceIndexB = currentFrameB * size + x + y * size * numFramesB;
+
+			bool transparentA = (pixelA[sourceIndexA] & 0xffffff) == 0;
+			bool transparentB = (pixelB[sourceIndexB] & 0xffffff) == 0;
+
+			if (!transparentA && !transparentB) return true;
+		}
+	}
+
+	return false;
 }
 
 

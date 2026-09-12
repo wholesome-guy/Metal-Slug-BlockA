@@ -36,9 +36,6 @@ void TesstObject::Render(Tmpl8::Surface* screen, Camera* camera)
 
 
 	_sprite->Draw(screen, position.x, position.y, false);
-
-	//DrawHitboxDebug(screen, camera);
-
 }
 
 

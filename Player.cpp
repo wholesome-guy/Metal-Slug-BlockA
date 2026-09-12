@@ -55,11 +55,12 @@ void Player::Render(Tmpl8::Surface * screen,Camera* camera)
 	if (legSprite != nullptr)   legSprite->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
 	//torso draw later (on top)
 	if (torsoSprite != nullptr) torsoSprite->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
-
+	_currentTorsoSprite = torsoSprite;
 	if (_isShooting)
 	{
 		Sprite* shootSprite = _shootClips[static_cast<int>(_animationState)].sprite;
 		if (shootSprite) shootSprite->Draw(screen, screenPosition.x, screenPosition.y, _isFacingLeft);
+		_currentTorsoSprite = shootSprite;
 	}
 }
 

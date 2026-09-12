@@ -8,6 +8,7 @@ class Level;
 class Camera;
 class CollisionDetection;
 class Debug;
+class TesstObject;
 namespace Tmpl8
 {
 
@@ -44,6 +45,7 @@ private:
 	Camera* _camera = nullptr;
 	CollisionDetection* _collision = nullptr;
 	Debug* _debug = nullptr;
+	TesstObject* _to = nullptr;
 };
 
 }

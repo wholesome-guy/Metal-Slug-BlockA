@@ -12,7 +12,7 @@ public:
 
 	float2 GetHitBox() { return { _position.x + _hitboxOffset.x,_position.y + _hitboxOffset.y }; }
 	int2 GetHitBoxSize() { return { _hitboxWidth,_hitboxHeight }; }
-
+	Sprite* GetSprite() { return _sprite; }
 
 	Sprite* _sprite = nullptr;
 	int _width;

@@ -15,7 +15,7 @@
 #define DEBUG true
 #define CRT true
 
-#define FULLSCREEN
+//#define FULLSCREEN
 
 // constants
 #define PI			3.14159265358979323846264f

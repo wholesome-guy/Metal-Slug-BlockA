@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "CollisionDetection.h"
 #include "Debug.h"
+#include "TesstObject.h"
 
 void Game::Init()
 {
@@ -89,9 +90,11 @@ void Game::InitObjects()
 	_level = new Level();
 	_camera = new Camera(SCRWIDTH, SCRHEIGHT);
 	_collision = new CollisionDetection();
+	_to = new TesstObject();
 
 	_collision->SetPlayer(_player);
 	_collision->SetLevel(_level);
+	_collision->SetTestObject(_to);
 }
 void Game::Update(float deltatime)
 {
@@ -107,6 +110,8 @@ void Game::Render()
 	screen->Clear(0);
 
 	_level->Render(screen, _camera);
+
+	_to->Render(screen, _camera);
 
 	_player->Render(screen, _camera);
 

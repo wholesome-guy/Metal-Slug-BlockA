@@ -24,9 +24,9 @@ private:
 
 
 	float _xOffset = 0.25f;
-	float _yOffset = 0.25f;
+	float _yOffset = 0.6f;
 	float _deadZoneHalfWidth = 40.f; 
-	float _deadZoneHalfHeight = 40.f;
+	float _deadZoneHalfHeight = 200.f;
 	bool _hasBounds = false;
 	float _minX = 0, _maxX = 0;
 };

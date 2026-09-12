@@ -32,6 +32,7 @@ public:
 	float2 GetHitboxPosition() { return { _position.x + _hitboxOffset.x, _position.y + _hitboxOffset.y };}
 	int2 GetHitboxSize() { return { _hitboxWidth,_hitboxHeight }; }
 	float2 GetPreviousHitbox() { return { _previousPosition.x + _hitboxOffset.x, _previousPosition.y + _hitboxOffset.y }; }
+	Sprite* GetSprite() { return _currentTorsoSprite; }
 	//void SetHitBoxOffset(int x, int y) { _hitboxOffset.x += x; _hitboxOffset.y += y; }
 
 private:
@@ -78,6 +79,9 @@ private:
 	float2 _hitboxOffset = { 18, 26 };
 	int _hitboxWidth = 28;
 	int _hitboxHeight = 38;
+
+
+	Sprite* _currentTorsoSprite = nullptr;
 
 	int _crouchIdleFrameCount = 7;
 	Sprite* _crouchIdleSprite = nullptr;
