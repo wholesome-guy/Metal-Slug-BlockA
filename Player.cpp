@@ -234,10 +234,14 @@ void Player::WalkUpdate(float deltatime)
 	if (_isCrouching)
 	{
 		_chosenSpeed = _crouchSpeed;
+		_hitboxOffset = _hitboxOffsetCrouch;
+		_hitboxSize = _hitboxSizeCrouch;
 	}
 	else
 	{
 		_chosenSpeed = _walkSpeed;
+		_hitboxOffset = _hitboxOffsetUpright;
+		_hitboxSize = _hitboxSizeUpright;
 	}
 
 	if (_isCrouching && _isShooting) _chosenSpeed = 0;

@@ -49,11 +49,11 @@ void Game::KeyDown(int input)
 		_player->Jump();
 	}
 
-	//if (input == GLFW_KEY_RIGHT) _player->SetHitBoxOffset(1, 0);
-	//if (input == GLFW_KEY_LEFT) _player->SetHitBoxOffset(-1, 0);
-	//if (input == GLFW_KEY_UP) _player->SetHitBoxOffset(0, 1);
-	//if (input == GLFW_KEY_DOWN) _player->SetHitBoxOffset(0, -1);
-	//if (input == GLFW_KEY_ENTER) std::cout << _player->GetHitboxOffset().x << " , " << _player->GetHitboxOffset().y << std::endl;
+	if (input == GLFW_KEY_RIGHT) _player->SetHitBoxOffset(1, 0);
+	if (input == GLFW_KEY_LEFT) _player->SetHitBoxOffset(-1, 0);
+	if (input == GLFW_KEY_UP) _player->SetHitBoxOffset(0, 1);
+	if (input == GLFW_KEY_DOWN) _player->SetHitBoxOffset(0, -1);
+	if (input == GLFW_KEY_ENTER) std::cout << _player->GetHitboxOffset().x << " , " << _player->GetHitboxOffset().y << std::endl;
 
 
 	UpdateMovementInput();

@@ -142,4 +142,3 @@ bool CollisionDetection::PixelPerfect64(Sprite* spriteA, Sprite* spriteB, bool i
 	return false;
 }
 
-

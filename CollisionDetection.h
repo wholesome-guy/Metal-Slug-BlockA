@@ -37,6 +37,7 @@ private:
 	float2 SlopeResolve(float2 positionA, int2 sizeA, float2 positionB, int2 sizeB);
 
 	bool PixelPerfect64(Sprite* spriteA, Sprite* spriteB, bool isColliding);
+	bool PixelPerfect64(Sprite* spriteA, float2 posA, Sprite* spriteB, float2 posB, bool isColliding);
 
 	void CollisionBroadPhase();
 	void PlayerTileCollisions();

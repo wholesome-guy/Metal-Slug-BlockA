@@ -30,11 +30,11 @@ public:
 
 	float2 GetPosition() { return _position; }
 	float2 GetHitboxPosition() { return { _position.x + _hitboxOffset.x, _position.y + _hitboxOffset.y };}
-	int2 GetHitboxSize() { return { _hitboxWidth,_hitboxHeight }; }
+	int2 GetHitboxSize() { return _hitboxSize; }
 	float2 GetPreviousHitbox() { return { _previousPosition.x + _hitboxOffset.x, _previousPosition.y + _hitboxOffset.y }; }
 	Sprite* GetSprite() { return _currentTorsoSprite; }
-	//void SetHitBoxOffset(int x, int y) { _hitboxOffset.x += x; _hitboxOffset.y += y; }
-
+	void SetHitBoxOffset(int x, int y) { _hitboxOffset.x += x; _hitboxOffset.y += y; }
+	float2 GetHitboxOffset() { return _hitboxOffset; }
 private:
 
 	void AnimationStateUpdate();
@@ -77,9 +77,13 @@ private:
 
 	//Collisions
 	float2 _hitboxOffset = { 18, 26 };
-	int _hitboxWidth = 28;
-	int _hitboxHeight = 38;
+	int2 _hitboxSize = { 18,26 };
 
+	float2 _hitboxOffsetUpright = { 18,26 };
+	int2 _hitboxSizeUpright = { 28,38 };
+
+	float2 _hitboxOffsetCrouch = { 18,40 };
+	int2 _hitboxSizeCrouch = { 28,24 };
 
 	Sprite* _currentTorsoSprite = nullptr;
 
